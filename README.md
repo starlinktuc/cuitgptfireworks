@@ -1,12 +1,12 @@
 
-# Fireworks Cookbook
+# CuitGPTFireworks
 
-Fireworks cookbook is a collection of recipes designed to assist in the development, evaluation, and deployment of Generative AI (GenAI) models.
+Fireworks AI on CuitGPT contains: recipes designed to assist in the development, evaluation, and deployment of Generative AI (GenAI) models.
 
-## Motivation
+## Motivacion
 Generative AI has seen unprecedented growth in recent times, spurring the creation of novel models and techniques. However, the information required to recreate these models and implement the latest modeling techniques is dispersed across various repositories, online forums, and research papers. The Fireworks Cookbook provides a set of comprehensive, ready-to-use recipes, enabling users to run and adapt them for diverse needs and applications. These recipes encompass a wide range of popular use-cases, including fine-tuning, generation, and evaluation. The cookbook is routinely updated to include recipes based on the latest advancements in the field.
 
-## Code organization
+## Organizacion del codigo
 The code in the repository is organized according to use-case, with some code serving multiple purposes. Our present emphasis is on Large Language Models (LLMs), however, we will incorporate more model classes in the future.
 
 ### Docker
@@ -16,32 +16,32 @@ The latest version is available on [DockerHub as fwai/cookbook](https://hub.dock
 
 The Dockerfile is located under [`recipes/docker`](https://github.com/fw-ai/cookbook/tree/main/recipes/docker/text)
 
-### Shared libraries
+### Librerias compartidas y gratuitas
 The codebase shared across recipes is situated in [`recipes/common`](https://github.com/fw-ai/cookbook/tree/main/recipes/common).
 
-### Recipes
+### Recetas
 Recipes are categorized according to their respective use-cases. Here is the list of currently supported use-cases. Please note, most of the recipes come with dedicated README files providing more in-depth information.
 
 **Environment:**
 * [Docker container for LLM development](https://github.com/fw-ai/cookbook/tree/main/recipes/docker/text).
 
-**Tuning:**
+**Tuneado:**
 * [LoRA instruction tuning](https://github.com/fw-ai/cookbook/tree/main/recipes/tune/instruct_lora).
 
-**Evaluation:**
+**Evaluacion:**
 * [Ranker leveraging perplexity for scoring](https://github.com/fw-ai/cookbook/tree/main/recipes/eval/perplexity_rank).
 
-**Generation:**
+**Generacion:**
 * [Inference with a LoRA adapter](https://github.com/fw-ai/cookbook/tree/main/recipes/generate/instruct_lora),
 * [Constrained output generation in json format](https://github.com/fw-ai/cookbook/tree/main/recipes/generate/jsonformer).
 
-### Examples 
+### Ejemplos 
 In order to facilitate users to build GenAI applications using fireworks offerings, we present example applications. Please see documentation inside the directory for more info.
 
-## Example Workflow
+## Ejemplo de Workflow
 To illustrate how to leverage the recipes for an end-to-end usecase, lets walk through the process of fine tuning a model, inspecting the results visually, and deploying the model to the Fireworks platform for inference.
 The instructions assume that the source code of the cookbook was checked out under `/workspace/cookbook`.
-### Build and instantiate docker container
+### Construye e Inicializa el contenedor de Docker......
 ```bash
 docker run --privileged -it --gpus all -p 8888:8888 \
   --mount type=bind,source="/workspace",target="/workspace" \
@@ -50,13 +50,13 @@ docker run --privileged -it --gpus all -p 8888:8888 \
   --ipc=host --net=host --cap-add  SYS_NICE \
   fwai/cookbook:latest
 
-# Or in case you want to rebuild it:
+# o si queres hacer un rebuild :
 cd cookbook/recipes/docker/text
 docker build -t fwai/cookbook:my .
 ```
 The following commands will run inside the container.
 For more details, go [here](https://github.com/fw-ai/cookbook/tree/main/recipes/docker/text).
-### Fine tune a model
+### Re-Afinado del modelo
 ```bash
 cd /workspace/cookbook/recipes/tune/instruct_lora
 export PYTHONPATH=.:/workspace/cookbook
@@ -64,12 +64,12 @@ export N_GPUS=`nvidia-smi --query-gpu=gpu_name --format=csv,noheader | wc -l`
 torchx run -s local_cwd dist.ddp -j 1x${N_GPUS} --script finetune.py -- \
   --config-name=summarize
 ```
-### Test the model locally
+### Testeando el modelo localmente
 ```bash
 cd /workspace/cookbook/recipes/generate/instruct_lora
 python generate.py
 ```
-### Upload the model to Fireworks
+### Subiendo el modelo a Fireworks AI
 Follow the [quick start instructions](https://fireworksai.readme.io/docs/quickstart) to set up your account with Fireworks and generate the API key.
 ```
 firectl signin
@@ -78,7 +78,7 @@ firectl create model my-model \
 firectl deploy my-model
 ```
 For more details, see this [guide](https://fireworksai.readme.io/docs/model-upload).
-### Test the model
+### Testeo del Modelo:
 
 ```bash
 export API_KEY=...
@@ -90,8 +90,9 @@ curl \
   -d '{"model": "accounts/${ACCOUNT_ID}/models/my-model", "prompt": "${PROMPT}"}' \
   https://api.fireworks.ai/inference/v1/completions
 ```
-### Clean up
+### Limpieza final
 ```bash
 firectl undeploy my-model
 firectl delete model my-model
 ```
+### [http://CuitGPT.nicar.workers.dev](http://CuitGPT.nicar.workers.dev) http://CuitGPT.nicar.workers.dev
